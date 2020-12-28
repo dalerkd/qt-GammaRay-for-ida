@@ -4,8 +4,34 @@ platform:
 
 install:
   ps: |
+    Push-Location C:\
+
     Invoke-WebRequest 'http://download.qt.io/official_releases/jom/jom.zip' -OutFile .\jom.zip
     Expand-Archive .\jom.zip
-    ls $(pwd)
-    ls .\jom
+    Remove-Item .\jom.zip
+    Get-ChildItem .\jom
 
+    New-Item -Path C:\Qt\src\ -ItemType Directory
+    Set-Location C:\Qt\src\
+    
+    git clone -b v5.6.3 'https://code.qt.io/qt/qt5.git' '5.6.3'
+    Set-Location C:\Qt\src\5.6.3\
+
+    git submodule update --init --recursive
+    Set-Location C:\
+
+    New-Item -Path C:\Qt\build\5.6.3\ -ItemType Directory
+
+    Pop-Location
+  cmd: |
+    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+    set _ROOT=C:\Qt\build\5.6.3
+    set PATH=%_ROOT%\qtrepotools\bin;%_ROOT%\qtbase\bin;%_ROOT%\gnuwin32\bin;%PATH%
+    set QMAKESPEC=win32-msvc2015
+    set _ROOT=
+
+    cd "C:\Qt\build\5.6.3\"
+    C:\Qt\src\5.6.3\configure.bat -release -nomake tests -nomake examples -qtnamespace QT -confirm-license -accessibility -opensource -platform win32-msvc2015 -opengl desktop -prefix .\
+    C:\jom\jom.exe -j%NUMBER_OF_PROCESSORS%
+    nmake install
+    
