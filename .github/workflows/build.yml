@@ -1,13 +1,11 @@
-name: GammaRay Build
-
+name: Qt-GammaRay Builds
 on: [push]
 
 jobs:
-  qt_build_test:
+  GammaRay-x64:
     runs-on: windows-2016
+    if: "startsWith(github.event.head_commit.message, '[build]')"
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Install jom
         shell: powershell
         run: |
@@ -24,18 +22,38 @@ jobs:
           mkdir .\Qt\src\
           cd .\Qt\src\
           git clone -b v5.6.3 https://code.qt.io/qt/qt5.git 5.6.3
-          cd .\5.6.3
+          cd .\5.6.3\
           git submodule update --init --recursive
-      - name: Clone latest GammaRay
+      - name: Clone latest Qt-GammaRay
         shell: cmd
         run: |
           cd D:\
           git clone https://github.com/KDAB/GammaRay.git
-      - name: Build Qt 5.6.3 and GammaRay
+      - name: Build Qt 5.6.3 and Qt-GammaRay
         shell: cmd
         run: |
-          dir
-          .\build.bat
+          call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+          set _ROOT=D:\Qt\build\5.6.3
+          set PATH=%_ROOT%\qtrepotools\bin;%_ROOT%\qtbase\bin;%_ROOT%\gnuwin32\bin;%PATH%
+          set QMAKESPEC=win32-msvc2015
+          set _ROOT=
+
+          cd D:\
+          mkdir .\Qt\build\5.6.3
+          cd .\Qt\build\5.6.3\
+          call D:\Qt\src\5.6.3\configure.bat -release -nomake tests -nomake examples -qtnamespace QT -confirm-license -accessibility -opensource -platform win32-msvc2015 -opengl desktop -prefix .\
+          D:\jom\jom.exe -j%NUMBER_OF_PROCESSORS%
+          nmake install
+          
+          cd D:\
+          mkdir .\artifacts
+          
+          cd D:\GammaRay\
+          mkdir .\build
+          cd .\build\
+          cmake -G "NMake Makefiles" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_PREFIX_PATH=D:\Qt\build\5.6.3" "-DCMAKE_INSTALL_PREFIX=D:\artifacts" ..
+          nmake
+          nmake install
       - name: Copy Qt DLLs
         shell: powershell
         run: |
