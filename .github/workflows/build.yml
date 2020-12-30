@@ -18,11 +18,10 @@ jobs:
       - name: Clone Qt 5.6.3
         shell: cmd
         run: |
-          cd D:\
-          mkdir .\Qt\src\
-          cd .\Qt\src\
+          mkdir D:\Qt\src\
+          cd D:\Qt\src\
           git clone -b v5.6.3 https://code.qt.io/qt/qt5.git 5.6.3
-          cd .\5.6.3\
+          cd D:\Qt\src\5.6.3\
           git submodule update --init --recursive
       - name: Clone latest Qt-GammaRay
         shell: cmd
@@ -38,19 +37,17 @@ jobs:
           set QMAKESPEC=win32-msvc2015
           set _ROOT=
 
-          cd D:\
-          mkdir .\Qt\build\5.6.3
-          cd .\Qt\build\5.6.3\
+          mkdir D:\Qt\build\5.6.3\
+          cd D:\Qt\build\5.6.3\
           call D:\Qt\src\5.6.3\configure.bat -release -nomake tests -nomake examples -qtnamespace QT -confirm-license -accessibility -opensource -platform win32-msvc2015 -opengl desktop -prefix .\
+          
+          cd D:\Qt\build\5.6.3\
           D:\jom\jom.exe -j%NUMBER_OF_PROCESSORS%
-          nmake install
+          D:\jom\jom.exe -j%NUMBER_OF_PROCESSORS% install
           
-          cd D:\
-          mkdir .\artifacts
-          
-          cd D:\GammaRay\
-          mkdir .\build
-          cd .\build\
+          mkdir D:\artifacts\
+          mkdir D:\GammaRay\build\
+          cd D:\GammaRay\build\
           cmake -G "NMake Makefiles" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_PREFIX_PATH=D:\Qt\build\5.6.3" "-DCMAKE_INSTALL_PREFIX=D:\artifacts" ..
           nmake
           nmake install
