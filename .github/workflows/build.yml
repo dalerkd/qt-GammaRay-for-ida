@@ -15,6 +15,7 @@ jobs:
           Remove-Item .\jom.zip
           Get-ChildItem $(pwd)
           Get-ChildItem .\jom
+          Get-PSDrive
       - name: Clone Qt 5.6.3
         shell: cmd
         run: |
