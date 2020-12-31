@@ -19,6 +19,7 @@ jobs:
       - name: Clone Qt 5.6.3
         shell: cmd
         run: |
+          @echo on
           mkdir C:\Qt\src\
           cd C:\Qt\src\
           git clone -b v5.6.3 https://code.qt.io/qt/qt5.git 5.6.3
