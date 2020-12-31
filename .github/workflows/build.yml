@@ -20,6 +20,7 @@ jobs:
         shell: cmd
         run: |
           @echo on
+          C:
           mkdir C:\Qt\src\
           cd C:\Qt\src\
           git clone -b v5.6.3 https://code.qt.io/qt/qt5.git 5.6.3
@@ -28,11 +29,15 @@ jobs:
       - name: Clone latest Qt-GammaRay
         shell: cmd
         run: |
+          @echo on
+          C:
           cd C:\
           git clone https://github.com/KDAB/GammaRay.git
       - name: Build Qt 5.6.3 and Qt-GammaRay
         shell: cmd
         run: |
+          @echo on
+          C:
           call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
           set _ROOT=C:\Qt\build\5.6.3
           set PATH=%_ROOT%\qtrepotools\bin;%_ROOT%\qtbase\bin;%_ROOT%\gnuwin32\bin;%PATH%
