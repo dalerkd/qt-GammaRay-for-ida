@@ -48,7 +48,7 @@ jobs:
           mkdir D:\artifacts\
           mkdir D:\GammaRay\build\
           cd D:\GammaRay\build\
-          cmake -G "NMake Makefiles" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_PREFIX_PATH=D:\Qt\build\5.6.3" "-DCMAKE_INSTALL_PREFIX=D:\artifacts" ..
+          cmake -G "NMake Makefiles" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_PREFIX_PATH=D:\Qt\build\5.6.3\qtbase\bin" "-DCMAKE_INSTALL_PREFIX=D:\artifacts" ..
           nmake
           nmake install
       - name: Copy Qt DLLs
