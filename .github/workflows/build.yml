@@ -33,7 +33,7 @@ jobs:
           @echo on
           C:
           cd C:\
-          git clone https://github.com/KDAB/GammaRay.git
+          git clone -b v2.11.2 https://github.com/KDAB/GammaRay.git
       - name: Build Qt 5.6.3 and Qt-GammaRay
         shell: cmd
         run: |
