@@ -1,7 +1,6 @@
 name: Qt-GammaRay Builds
 on: [push]
 
-
 jobs:
   GammaRay-x64:
     runs-on: windows-2016
